@@ -1,44 +1,83 @@
 package com.driver;
 
 public class Pizza {
+    private boolean isVeg; // if its a veg pizza (isVeg = true) else if non veg (isVeg=false)
 
-    protected int price;
-    private Boolean isVeg;
-    protected String bill;
+    private String bill="";
+    private int price=0;
+    private boolean isCheeseAddedOnce = false;
+    private boolean isToppingsAddedOnce = false;
+    private boolean isTakeAwayAdded = false;
 
-    public Pizza(Boolean isVeg) {
+    // given prices that we can change
+    private int vegPizzaBasePrice = 300;
+    private int NonvegPizzaBasePrice = 400;
+    private int extraCheesePrice = 80;
+    private int extraToppingsVegPrice = 70;
+    private int extraToppingsNonVegPrice = 120;
+    private int TakeAwayPrice = 20;
+
+
+    public Pizza(boolean isVeg){
         this.isVeg = isVeg;
-        this.price = isVeg ? 300 : 400;
-        this.bill = "Base Price Of The Pizza: " + this.price + "\n";
+
+        if(isVeg == true){
+            price += vegPizzaBasePrice;
+            bill = bill + "Base Price Of The Pizza: " + vegPizzaBasePrice + "\n";
+        } else {
+            price += NonvegPizzaBasePrice;
+            bill = bill + "Base Price Of The Pizza: " + NonvegPizzaBasePrice + "\n";
+        }
     }
 
-    public int getPrice() {
+    public int getPrice(){
         return this.price;
     }
 
-    public void addExtraCheese() {
-        if (!bill.contains("Extra Cheese Added")) {
-            this.price += isVeg ? 80 : 0;
-            this.bill += "Extra Cheese Added: " + (isVeg ? 80 : 0) + "\n";
+    public void addExtraCheese(){
+        if(isCheeseAddedOnce == false){
+            price = price + extraCheesePrice;
+
+            isCheeseAddedOnce = true;
         }
     }
 
-    public void addExtraToppings() {
-        if (!bill.contains("Extra Toppings Added")) {
-            this.price += isVeg ? 70 : 120;
-            this.bill += "Extra Toppings Added: " + (isVeg ? 70 : 120) + "\n";
+    public void addExtraToppings(){
+        if(isToppingsAddedOnce == false){
+            if(isVeg == true){
+                this.price += extraToppingsVegPrice;
+            } else {
+                this.price += extraToppingsNonVegPrice;
+            }
+
+            isToppingsAddedOnce = true;
         }
     }
 
-    public void addTakeaway() {
-        if (!bill.contains("Paperbag Added")) {
-            this.price += 20;
-            this.bill += "Paperbag Added: 20\n";
-        }
+    public void addTakeaway(){
+        isTakeAwayAdded = true;
+        this.price += TakeAwayPrice;
     }
 
-    public String getBill() {
-        this.bill += "Total Price: " + this.price + "\n";
+    public String getBill(){
+        if(isCheeseAddedOnce==true){
+            this.bill = this.bill + "Extra Cheese Added: " + extraCheesePrice + "\n";
+        }
+
+        if(isToppingsAddedOnce){
+            if(isVeg == true){
+                this.bill = this.bill + "Extra Toppings Added: " + extraToppingsVegPrice +"\n";
+            } else {
+                this.bill = this.bill + "Extra Toppings Added: " + extraToppingsNonVegPrice +"\n";
+            }
+        }
+
+        if(isTakeAwayAdded){
+            this.bill = this.bill + "Paperbag Added: " + TakeAwayPrice +"\n";
+        }
+
+        this.bill = this.bill + "Total price: " + this.price;
+
         return this.bill;
     }
 }
